@@ -58,13 +58,31 @@ class TodoListView extends ConsumerWidget {
               newTodoController.clear();
             },
           ),
-          for (final todo in todos)
-            CheckboxListTile(
-              value: todo.completed,
-              onChanged: (value) =>
-                  ref.read(todosProvider.notifier).toggle(todo.id),
-              title: Text(todo.description),
+          for (final todo in todos) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: CheckboxListTile(
+                    value: todo.completed,
+                    onChanged: (value) =>
+                        ref.read(todosProvider.notifier).toggle(todo.id),
+                    title: Text(
+                      todo.description,
+                      style: TextStyle(
+                        decoration: todo.completed == true ? TextDecoration.lineThrough : TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    ref.read(todosProvider.notifier).removeTodo(todo.id);
+                  },
+                  child: const Icon(Icons.delete),
+                ),
+              ],
             ),
+          ]
         ],
       ),
     );
